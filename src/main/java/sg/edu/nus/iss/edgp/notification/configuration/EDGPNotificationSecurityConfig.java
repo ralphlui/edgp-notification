@@ -23,8 +23,8 @@ public class EDGPNotificationSecurityConfig {
 
 	private static final String[] SECURED_URLs = { "/api/notifications/**" };
 
-	@Value("${allowed.origin}")
-	private String allowedOrigin;
+	@Value("${client.url}")
+	private String clientURL;
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -36,7 +36,7 @@ public class EDGPNotificationSecurityConfig {
 		return http.cors(cors -> {
 			cors.configurationSource(request -> {
 				CorsConfiguration config = new CorsConfiguration();
-				config.setAllowedOrigins(List.of(allowedOrigin));
+				config.setAllowedOrigins(List.of(clientURL));
 				config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "OPTIONS"));
 				config.setAllowedHeaders(List.of("*"));
 				config.applyPermitDefaultValues();
@@ -54,8 +54,8 @@ public class EDGPNotificationSecurityConfig {
 				// CSRF protection is disabled because JWT Bearer tokens are used for stateless
 				// authentication.
 				.csrf(csrf -> csrf.disable()) // NOSONAR - CSRF is not required for JWT-based stateless authentication
-				.authorizeHttpRequests(
-						auth -> auth.requestMatchers(SECURED_URLs).permitAll().anyRequest().authenticated())
+				//.authorizeHttpRequests(
+						//auth -> auth.requestMatchers(SECURED_URLs).permitAll().anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();// To
 																														// add
 																														// JWTFilter
