@@ -22,7 +22,7 @@ public class EmailNotificationService {
 
 	private final AWSConfig awsConfig;
 	private final EDGPNotificationConfig edgpNotificationConfig;
-	private static final Logger logger = LoggerFactory.getLogger(AmazonSES.class);
+	private static final Logger logger = LoggerFactory.getLogger(EmailNotificationService.class);
 
 	public NotificationDTO sendChaingDefaultPassword(EmailNotificationRequest emailNotiRequest) {
 
