@@ -8,6 +8,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.ses.SesClient;
+import software.amazon.awssdk.services.sqs.SqsClient;
 
 @Configuration
 public class AWSConfig {
@@ -38,5 +39,12 @@ public class AWSConfig {
 		return SesClient.builder().credentialsProvider(StaticCredentialsProvider.create(awsCreds))
 				.region(Region.of(awsRegion)).build();
 	}
+	
+	  @Bean
+	    public SqsClient sqsClient() {
+	        return SqsClient.builder()
+	                .region(Region.AP_SOUTHEAST_1)
+	                .build();
+	    }
 
 }
