@@ -11,7 +11,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import sg.edu.nus.iss.edgp.notification.JwtConfig;
+import sg.edu.nus.iss.edgp.notification.configuration.JwtConfig;
 import sg.edu.nus.iss.edgp.notification.pojo.User;
 import sg.edu.nus.iss.edgp.notification.utility.JSONReader;
 

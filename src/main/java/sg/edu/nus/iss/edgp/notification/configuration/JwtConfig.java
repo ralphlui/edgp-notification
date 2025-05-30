@@ -1,4 +1,4 @@
-package sg.edu.nus.iss.edgp.notification;
+package sg.edu.nus.iss.edgp.notification.configuration;
 
 import java.security.interfaces.RSAPublicKey;
 

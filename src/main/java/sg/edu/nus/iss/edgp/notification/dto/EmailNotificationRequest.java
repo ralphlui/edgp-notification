@@ -9,6 +9,5 @@ public class EmailNotificationRequest {
 
 	private String userName;
 	private String temporaryPassword;
-	private String loginUrl;
 	private String userEmail;
 }

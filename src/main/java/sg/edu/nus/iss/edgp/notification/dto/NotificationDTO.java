@@ -8,6 +8,5 @@ import lombok.Setter;
 public class NotificationDTO {
 
 	private String userName;
-	private String userEmail;
 	private boolean isSent;
 }

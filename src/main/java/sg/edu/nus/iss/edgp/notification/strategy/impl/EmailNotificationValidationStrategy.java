@@ -22,8 +22,6 @@ public class EmailNotificationValidationStrategy implements IAPIHelperValidation
 			missingFields.add("Username");
 		if (emailNotiReq.getTemporaryPassword().isEmpty())
 			missingFields.add("Temporary Password");
-		if (emailNotiReq.getLoginUrl().isEmpty())
-			missingFields.add("Login URL");
 		if (emailNotiReq.getUserEmail().isEmpty())
 			missingFields.add("User email");
 

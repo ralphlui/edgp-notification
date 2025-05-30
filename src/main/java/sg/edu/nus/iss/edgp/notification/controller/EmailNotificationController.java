@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import sg.edu.nus.iss.edgp.notification.dto.APIResponse;
 import sg.edu.nus.iss.edgp.notification.dto.AuditDTO;
 import sg.edu.nus.iss.edgp.notification.dto.EmailNotificationRequest;
+import sg.edu.nus.iss.edgp.notification.dto.NotificationDTO;
 import sg.edu.nus.iss.edgp.notification.dto.ValidationResult;
 import sg.edu.nus.iss.edgp.notification.exception.EmailNotificationServiceException;
 import sg.edu.nus.iss.edgp.notification.service.impl.AuditService;
@@ -35,7 +36,7 @@ public class EmailNotificationController {
 	private static final Logger logger = LoggerFactory.getLogger(EmailNotificationController.class);
 
 	@PostMapping(value = "/sendEmail", produces = "application/json")
-	public <T> ResponseEntity<APIResponse<T>> sendChaingDefaultPassword(@RequestHeader("Authorization") String authorizationHeader,
+	public  ResponseEntity<APIResponse<NotificationDTO>> sendChaingDefaultPassword(@RequestHeader("Authorization") String authorizationHeader,
 			@RequestBody EmailNotificationRequest emailNotiReq) {
 
 		logger.info("Calling change default password API ...");
@@ -55,11 +56,12 @@ public class EmailNotificationController {
 				return ResponseEntity.status(validationResult.getStatus()).body(APIResponse.error(message));
 			}
 
-			boolean isSent = emailNotificationService.sendChaingDefaultPassword(emailNotiReq);
+			NotificationDTO notiDTO = emailNotificationService.sendChaingDefaultPassword(emailNotiReq);
+			boolean isSent = notiDTO.isSent();
 			message = isSent ? "Email is sent successfully." : "Email is not sent successfully.";
 			HttpStatus status = isSent ? HttpStatus.OK : validationResult.getStatus();
 			auditService.logAudit(auditDTO, status.value(), message, authorizationHeader);
-			return isSent ? ResponseEntity.status(status).body(APIResponse.success(null, message))
+			return isSent ? ResponseEntity.status(status).body(APIResponse.success(notiDTO, message))
 					: ResponseEntity.status(status).body(APIResponse.error(message));
 
 		} catch (Exception e) {
