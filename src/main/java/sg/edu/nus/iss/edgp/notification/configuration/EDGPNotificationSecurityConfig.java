@@ -10,12 +10,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.HstsHeaderWriter;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
 import org.springframework.web.cors.CorsConfiguration;
+
+import sg.edu.nus.iss.edgp.notification.authentication.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,20 +24,16 @@ public class EDGPNotificationSecurityConfig {
 
 	private static final String[] SECURED_URLs = { "/api/notifications/**" };
 
-	@Value("${allowed.origin}")
-	private String allowedOrigin;
+	@Value("${client.url}")
+	private String clientURL;
+	
 
 	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-
-	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
 		return http.cors(cors -> {
 			cors.configurationSource(request -> {
 				CorsConfiguration config = new CorsConfiguration();
-				config.setAllowedOrigins(List.of(allowedOrigin));
+				config.setAllowedOrigins(List.of(clientURL));
 				config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "OPTIONS"));
 				config.setAllowedHeaders(List.of("*"));
 				config.applyPermitDefaultValues();
@@ -56,10 +53,9 @@ public class EDGPNotificationSecurityConfig {
 				.csrf(csrf -> csrf.disable()) // NOSONAR - CSRF is not required for JWT-based stateless authentication
 				.authorizeHttpRequests(
 						auth -> auth.requestMatchers(SECURED_URLs).permitAll().anyRequest().authenticated())
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();// To
-																														// add
-																														// JWTFilter
-																														// Later
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+				.build();
 	}
 
 	@Bean
