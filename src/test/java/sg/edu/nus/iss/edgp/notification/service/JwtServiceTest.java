@@ -37,7 +37,6 @@ public class JwtServiceTest {
         jsonReader = mock(JSONReader.class);
         jwtService = new JwtService(jwtConfig, jsonReader);
 
-        // For simplicity, use random key
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
         keyGen.initialize(2048);
         KeyPair keyPair = keyGen.generateKeyPair();
@@ -126,6 +125,4 @@ public class JwtServiceTest {
 
         assertEquals(user.getEmail(), userDetails.getUsername());
     }
-
-    // You may add additional test for exception paths, expired token handling, etc.
 }
