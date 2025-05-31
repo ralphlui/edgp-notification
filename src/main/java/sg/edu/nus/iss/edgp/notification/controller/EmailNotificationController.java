@@ -35,7 +35,7 @@ public class EmailNotificationController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmailNotificationController.class);
 
-	@PostMapping(value = "/sendEmail", produces = "application/json")
+	@PostMapping(value = "/default-password-change", produces = "application/json")
 	public  ResponseEntity<APIResponse<NotificationDTO>> sendChaingDefaultPassword(@RequestHeader("Authorization") String authorizationHeader,
 			@RequestBody EmailNotificationRequest emailNotiReq) {
 
