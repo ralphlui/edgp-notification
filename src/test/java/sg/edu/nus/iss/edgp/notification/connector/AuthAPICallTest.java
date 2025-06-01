@@ -53,23 +53,18 @@ public class AuthAPICallTest {
 
 	@Test
 	void testHttpClientSendReturnsExpectedResponse() throws Exception {
-		// Arrange
 		String expectedResponseBody = "{\"status\":\"active\"}";
 
-		// Simulate the response body
 		when(httpResponseMock.body()).thenReturn(expectedResponseBody);
 
 		when(httpClientMock.send(any(HttpRequest.class), Mockito.<HttpResponse.BodyHandler<String>>any()))
 				.thenReturn(httpResponseMock);
 
-		// Create dummy request (you can customize this)
 		HttpRequest request = HttpRequest.newBuilder().uri(new java.net.URI("http://example.com")).GET().build();
 
-		// Act
 		HttpResponse<String> response = httpClientMock.send(request, HttpResponse.BodyHandlers.ofString());
 		String actualBody = response.body();
 
-		// Assert
 		assertEquals(expectedResponseBody, actualBody);
 	}
 }

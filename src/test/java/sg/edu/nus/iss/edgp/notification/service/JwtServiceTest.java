@@ -3,7 +3,6 @@ package sg.edu.nus.iss.edgp.notification.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 
