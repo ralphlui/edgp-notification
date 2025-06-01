@@ -22,7 +22,6 @@ public class JwtConfig {
 		return jwtPublicKey.replaceAll("\\s", "");
 	}
 
-	@Bean
 	public RSAPublicKey loadPublicKey() throws Exception {
 		
 		byte[] decoded = Base64.getDecoder().decode(getJWTPubliceKey());
