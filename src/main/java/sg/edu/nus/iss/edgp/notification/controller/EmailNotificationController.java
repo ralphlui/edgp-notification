@@ -35,13 +35,13 @@ public class EmailNotificationController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmailNotificationController.class);
 
-	@PostMapping(value = "/default-password-change", produces = "application/json")
-	public  ResponseEntity<APIResponse<NotificationDTO>> sendChaingDefaultPassword(@RequestHeader("Authorization") String authorizationHeader,
+	@PostMapping(value = "/set-initial-password-request", produces = "application/json")
+	public  ResponseEntity<APIResponse<NotificationDTO>> sendInitialPasswordSetRequest(@RequestHeader("Authorization") String authorizationHeader,
 			@RequestBody EmailNotificationRequest emailNotiReq) {
 
-		logger.info("Calling change default password API ...");
+		logger.info("Calling email notification initial password set request API ...");
 		String message = "";
-		String activityType = "Sending change default password";
+		String activityType = "Sending initial password set request";
 		String endpoint = "/api/notifications";
 		String httpMethod = HttpMethod.POST.name();
 		
@@ -56,7 +56,7 @@ public class EmailNotificationController {
 				return ResponseEntity.status(validationResult.getStatus()).body(APIResponse.error(message));
 			}
 
-			NotificationDTO notiDTO = emailNotificationService.sendChaingDefaultPassword(emailNotiReq);
+			NotificationDTO notiDTO = emailNotificationService.sendInitialPasswordSetRequest(emailNotiReq);
 			boolean isSent = notiDTO.isSent();
 			message = isSent ? "Email is sent successfully." : "Email is not sent successfully.";
 			HttpStatus status = isSent ? HttpStatus.OK : validationResult.getStatus();

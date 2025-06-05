@@ -24,7 +24,7 @@ public class EmailNotificationService {
 	private final EDGPNotificationConfig edgpNotificationConfig;
 	private static final Logger logger = LoggerFactory.getLogger(EmailNotificationService.class);
 
-	public NotificationDTO sendChaingDefaultPassword(EmailNotificationRequest emailNotiRequest) {
+	public NotificationDTO sendInitialPasswordSetRequest(EmailNotificationRequest emailNotiRequest) {
 
 		try {
 			SesClient client = awsConfig.sesClient();

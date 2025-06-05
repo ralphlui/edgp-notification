@@ -45,7 +45,7 @@ public class EmailNotificationServiceTest {
     }
 
     @Test
-    void testSendChaingDefaultPassword_success() {
+    void testSendInitialPasswordSetRequest_success() {
         EmailNotificationRequest request = new EmailNotificationRequest();
         request.setUserEmail("test@example.com");
 
@@ -68,7 +68,7 @@ public class EmailNotificationServiceTest {
 
             dtoMapper.when(() -> DTOMapper.toNotificationDTO("test@example.com", true)).thenReturn(expectedDto);
 
-            NotificationDTO result = emailNotificationService.sendChaingDefaultPassword(request);
+            NotificationDTO result = emailNotificationService.sendInitialPasswordSetRequest(request);
 
             assertNotNull(result);
             assertTrue(result.isSent());
@@ -77,7 +77,7 @@ public class EmailNotificationServiceTest {
     }
 
     @Test
-    void testSendChaingDefaultPassword_failure() {
+    void testSendInitialPasswordSetRequest_failure() {
         EmailNotificationRequest request = new EmailNotificationRequest();
         request.setUserEmail("test@example.com");
       
@@ -85,7 +85,7 @@ public class EmailNotificationServiceTest {
 
         EmailNotificationServiceException thrown = assertThrows(
                 EmailNotificationServiceException.class,
-                () -> emailNotificationService.sendChaingDefaultPassword(request)
+                () -> emailNotificationService.sendInitialPasswordSetRequest(request)
         );
 
         assertTrue(thrown.getMessage().contains("An error occured"));

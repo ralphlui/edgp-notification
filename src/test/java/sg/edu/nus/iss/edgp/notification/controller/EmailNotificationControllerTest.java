@@ -66,7 +66,7 @@ public class EmailNotificationControllerTest {
 	}
 
 	@Test
-	void testSendChaingDefaultPassword_Success() throws Exception {
+	void testSendInitialPasswordSetRequest_Success() throws Exception {
 		// Mock behavior
 		ValidationResult validResult = new ValidationResult();
 		validResult.setValid(true);
@@ -75,9 +75,9 @@ public class EmailNotificationControllerTest {
 
 		when(auditService.createAuditDTO(anyString(), anyString(), anyString())).thenReturn(auditDTO);
 		when(emailNotificationValidationStrategy.validateObject(any())).thenReturn(validResult);
-		when(emailNotificationService.sendChaingDefaultPassword(any())).thenReturn(notificationDTO);
+		when(emailNotificationService.sendInitialPasswordSetRequest(any())).thenReturn(notificationDTO);
 
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/default-password-change")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/set-initial-password-request")
 				.contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer test-token")
 				.content(objectMapper.writeValueAsString(validResult)))
 				.andExpect(MockMvcResultMatchers.status().isOk())
@@ -87,7 +87,7 @@ public class EmailNotificationControllerTest {
 	}
 
 	@Test
-	void testSendChaingDefaultPassword_ValidationError() throws Exception {
+	void testSendInitialPasswordSetRequest_ValidationError() throws Exception {
 		ValidationResult invalidResult = new ValidationResult();
 		invalidResult.setValid(false);
 		invalidResult.setMessage("Invalid request");
@@ -96,7 +96,7 @@ public class EmailNotificationControllerTest {
 		when(auditService.createAuditDTO(anyString(), anyString(), anyString())).thenReturn(auditDTO);
 		when(emailNotificationValidationStrategy.validateObject(any())).thenReturn(invalidResult);
 
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/default-password-change")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/set-initial-password-request")
 				.contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer test-token")
 				.content(objectMapper.writeValueAsString(validRequest)))
 				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andExpect(jsonPath("$.success").value(false))
@@ -104,7 +104,7 @@ public class EmailNotificationControllerTest {
 	}
 
 	@Test
-	void testSendChaingDefaultPassword_EmailNotSent() throws Exception {
+	void testSendInitialPasswordSetRequest_EmailNotSent() throws Exception {
 		ValidationResult validResult = new ValidationResult();
 		validResult.setValid(true);
 		validResult.setMessage("");
@@ -113,9 +113,9 @@ public class EmailNotificationControllerTest {
 
 		when(auditService.createAuditDTO(anyString(), anyString(), anyString())).thenReturn(auditDTO);
 		when(emailNotificationValidationStrategy.validateObject(any())).thenReturn(validResult);
-		when(emailNotificationService.sendChaingDefaultPassword(any())).thenReturn(notificationDTO);
+		when(emailNotificationService.sendInitialPasswordSetRequest(any())).thenReturn(notificationDTO);
 
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/default-password-change")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/set-initial-password-request")
 				.contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer test-token")
 				.content(objectMapper.writeValueAsString(validRequest)))
 				.andExpect(MockMvcResultMatchers.status().isOk()) // Adjust if a different status is returned for
@@ -125,7 +125,7 @@ public class EmailNotificationControllerTest {
 	}
 
 	@Test
-	void testSendChaingDefaultPassword_InternalServerError() throws Exception {
+	void testSendInitialPasswordSetRequest_InternalServerError() throws Exception {
 		ValidationResult validResult = new ValidationResult();
 		validResult.setValid(true);
 		validResult.setMessage("");
@@ -133,10 +133,10 @@ public class EmailNotificationControllerTest {
 
 		when(auditService.createAuditDTO(anyString(), anyString(), anyString())).thenReturn(auditDTO);
 		when(emailNotificationValidationStrategy.validateObject(any())).thenReturn(validResult);
-		when(emailNotificationService.sendChaingDefaultPassword(any()))
+		when(emailNotificationService.sendInitialPasswordSetRequest(any()))
 				.thenThrow(new RuntimeException("Unexpected error"));
 
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/default-password-change")
+		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/set-initial-password-request")
 				.contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer test-token")
 				.content(objectMapper.writeValueAsString(validRequest)))
 				.andExpect(MockMvcResultMatchers.status().isInternalServerError())
