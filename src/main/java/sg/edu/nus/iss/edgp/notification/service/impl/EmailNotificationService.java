@@ -34,7 +34,7 @@ public class EmailNotificationService {
 			String body = "Welcome to our system.<br> Your account has been successfully created.<br>"
 					+ " Username: " + emailNotiRequest.getUserEmail() + "<br>" 
 					+ "For security reasons, you are required to set your password immediately upon first use.<br>"
-					+ " Please visit the login page here: " + edgpNotificationConfig.getClientLoginURL() + "<br><br>"
+					+ " Please visit this page here: " + edgpNotificationConfig.getClientInitialisePasswordURL() + "<br><br>"
 					+ "This is an auto-generated email, please do not reply.";
 
 			boolean isSent = AmazonSES.sendEmail(client, from, Arrays.asList(emailNotiRequest.getUserEmail()), subject,
