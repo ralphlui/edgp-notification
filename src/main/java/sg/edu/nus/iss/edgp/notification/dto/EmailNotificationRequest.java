@@ -7,7 +7,5 @@ import lombok.Setter;
 @Setter
 public class EmailNotificationRequest {
 
-	private String userName;
-	private String temporaryPassword;
 	private String userEmail;
 }

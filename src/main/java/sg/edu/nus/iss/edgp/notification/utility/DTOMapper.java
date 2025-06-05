@@ -9,7 +9,7 @@ public class DTOMapper {
 
 	public static NotificationDTO toNotificationDTO(String userName, boolean isSent) {
 		NotificationDTO notiDTO = new NotificationDTO();
-		notiDTO.setUserName(userName);
+		notiDTO.setUserEmail(userName);
 		notiDTO.setSent(isSent);
 		return notiDTO;
 	}

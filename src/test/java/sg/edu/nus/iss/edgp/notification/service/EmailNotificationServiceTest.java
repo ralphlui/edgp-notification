@@ -45,14 +45,12 @@ public class EmailNotificationServiceTest {
     }
 
     @Test
-    void testSendChaingDefaultPassword_success() {
+    void testSendInitialPasswordSetRequest_success() {
         EmailNotificationRequest request = new EmailNotificationRequest();
-        request.setUserName("testuser");
         request.setUserEmail("test@example.com");
-        request.setTemporaryPassword("TempPass123");
 
         NotificationDTO expectedDto = new NotificationDTO();
-        expectedDto.setUserName("testuser");
+        expectedDto.setUserEmail(request.getUserEmail());
         expectedDto.setSent(true);
 
         Mockito.when(awsConfig.sesClient()).thenReturn(sesClient);
@@ -68,28 +66,26 @@ public class EmailNotificationServiceTest {
                     Mockito.anyString(),
                     Mockito.anyString())).thenReturn(true);
 
-            dtoMapper.when(() -> DTOMapper.toNotificationDTO("testuser", true)).thenReturn(expectedDto);
+            dtoMapper.when(() -> DTOMapper.toNotificationDTO("test@example.com", true)).thenReturn(expectedDto);
 
-            NotificationDTO result = emailNotificationService.sendChaingDefaultPassword(request);
+            NotificationDTO result = emailNotificationService.sendInitialPasswordSetRequest(request);
 
             assertNotNull(result);
             assertTrue(result.isSent());
-            assertEquals("testuser", result.getUserName());
+            assertEquals("test@example.com", result.getUserEmail());
         }
     }
 
     @Test
-    void testSendChaingDefaultPassword_failure() {
+    void testSendInitialPasswordSetRequest_failure() {
         EmailNotificationRequest request = new EmailNotificationRequest();
-        request.setUserName("testuser");
         request.setUserEmail("test@example.com");
-        request.setTemporaryPassword("TempPass123");
-
+      
         Mockito.when(awsConfig.sesClient()).thenThrow(new RuntimeException("SES client error"));
 
         EmailNotificationServiceException thrown = assertThrows(
                 EmailNotificationServiceException.class,
-                () -> emailNotificationService.sendChaingDefaultPassword(request)
+                () -> emailNotificationService.sendInitialPasswordSetRequest(request)
         );
 
         assertTrue(thrown.getMessage().contains("An error occured"));
