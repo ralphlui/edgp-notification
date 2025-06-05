@@ -10,13 +10,13 @@ class DTOMapperTest {
 
     @Test
     void testToNotificationDTO() {
-        String userName = "john_doe";
+        String userName = "john_doe@gmail.com";
         boolean isSent = true;
 
         NotificationDTO dto = DTOMapper.toNotificationDTO(userName, isSent);
 
         assertNotNull(dto);
-        assertEquals(userName, dto.getUserName());
+        assertEquals(userName, dto.getUserEmail());
         assertTrue(dto.isSent());
     }
 }

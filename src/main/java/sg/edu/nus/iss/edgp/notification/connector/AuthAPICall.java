@@ -29,17 +29,18 @@ public class AuthAPICall {
                     .connectTimeout(Duration.ofSeconds(30))
                     .build();
 
-            String url = authURL.trim() + "active";
+            String url = authURL.trim() + "/profile";
 
-            String jsonBody = "{\"userId\": \"" + userId + "\"}";
+
             logger.info(url);
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .timeout(Duration.ofSeconds(30))
                     .header("Authorization", authorizationHeader)
+                    .header("X-User-Id", userId)
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
+                    .GET()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

@@ -22,8 +22,6 @@ public class EmailNotificationValidationStrategyTest {
 	@Test
 	public void testValidEmailNotificationRequest() {
 		EmailNotificationRequest request = new EmailNotificationRequest();
-		request.setUserName("testUser");
-		request.setTemporaryPassword("tempPass123");
 		request.setUserEmail("test@example.com");
 
 		ValidationResult result = validationStrategy.validateObject(request);
@@ -34,44 +32,26 @@ public class EmailNotificationValidationStrategyTest {
 	}
 
 	@Test
-	public void testMissingUserName() {
+	public void testMissingUserEmail() {
 		EmailNotificationRequest request = new EmailNotificationRequest();
-		request.setUserName("");
-		request.setTemporaryPassword("tempPass123");
-		request.setUserEmail("test@example.com");
+		request.setUserEmail("");
 
 		ValidationResult result = validationStrategy.validateObject(request);
 
 		assertFalse(result.isValid());
-		assertEquals("Username is required", result.getMessage());
+		assertEquals("User email is required", result.getMessage());
 		assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
 	}
 
 	@Test
 	public void testMissingAllFields() {
 		EmailNotificationRequest request = new EmailNotificationRequest();
-		request.setUserName("");
-		request.setTemporaryPassword("");
 		request.setUserEmail("");
 
 		ValidationResult result = validationStrategy.validateObject(request);
 
 		assertFalse(result.isValid());
-		assertEquals("Username and Temporary Password and User email is required", result.getMessage());
-		assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
-	}
-
-	@Test
-	public void testMissingTemporaryPasswordAndEmail() {
-		EmailNotificationRequest request = new EmailNotificationRequest();
-		request.setUserName("testUser");
-		request.setTemporaryPassword("");
-		request.setUserEmail("");
-
-		ValidationResult result = validationStrategy.validateObject(request);
-
-		assertFalse(result.isValid());
-		assertEquals("Temporary Password and User email is required", result.getMessage());
+		assertEquals("User email is required", result.getMessage());
 		assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
 	}
 }
