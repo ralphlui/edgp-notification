@@ -55,7 +55,7 @@ public class EmailNotificationServiceTest {
 
         Mockito.when(awsConfig.sesClient()).thenReturn(sesClient);
         Mockito.when(awsConfig.getEmailFrom()).thenReturn("noreply@example.com");
-        Mockito.when(edgpNotificationConfig.getClientInitialisePasswordURL()).thenReturn("http://example.com/login");
+        Mockito.when(edgpNotificationConfig.getClientInvitationUserURL()).thenReturn("http://example.com/login");
 
         try (MockedStatic<AmazonSES> amazonSES = Mockito.mockStatic(AmazonSES.class);
              MockedStatic<DTOMapper> dtoMapper = Mockito.mockStatic(DTOMapper.class)) {
