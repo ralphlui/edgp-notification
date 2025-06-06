@@ -7,11 +7,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EDGPNotificationConfig {
 
-	@Value("${client.initialise.password.url}")
-	private String clientInitialisePasswordURL;
+	@Value("${client.invitation.user.url}")
+	private String clientInvitationUserURL;
 
 	@Bean
-	public String getClientInitialisePasswordURL() {
-		return clientInitialisePasswordURL;
+	public String getClientInvitationUserURL() {
+		return clientInvitationUserURL;
 	}
 }

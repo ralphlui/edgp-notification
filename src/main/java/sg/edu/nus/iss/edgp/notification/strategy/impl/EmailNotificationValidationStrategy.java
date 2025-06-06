@@ -16,10 +16,15 @@ public class EmailNotificationValidationStrategy implements IAPIHelperValidation
 	@Override
 	public ValidationResult validateObject(EmailNotificationRequest emailNotiReq) {
 		ValidationResult validationResult = new ValidationResult();
+		String userEmail = emailNotiReq.getUserEmail();
+		String token = emailNotiReq.getToken();
 
 		List<String> missingFields = new ArrayList<>();
-		if (emailNotiReq.getUserEmail().isEmpty())
+		if (userEmail == null || userEmail.isEmpty())
 			missingFields.add("User email");
+		if ( token == null || token.isEmpty())
+			missingFields.add("User's token");
+
 
 		if (!missingFields.isEmpty()) {
 			validationResult.setMessage(String.join(" and ", missingFields) + " is required");

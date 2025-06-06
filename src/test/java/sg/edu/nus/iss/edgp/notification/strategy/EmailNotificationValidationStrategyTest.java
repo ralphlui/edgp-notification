@@ -23,6 +23,7 @@ public class EmailNotificationValidationStrategyTest {
 	public void testValidEmailNotificationRequest() {
 		EmailNotificationRequest request = new EmailNotificationRequest();
 		request.setUserEmail("test@example.com");
+		request.setToken("AAAAAA");
 
 		ValidationResult result = validationStrategy.validateObject(request);
 
@@ -35,6 +36,7 @@ public class EmailNotificationValidationStrategyTest {
 	public void testMissingUserEmail() {
 		EmailNotificationRequest request = new EmailNotificationRequest();
 		request.setUserEmail("");
+		request.setToken("AAAAAA");
 
 		ValidationResult result = validationStrategy.validateObject(request);
 
@@ -47,11 +49,12 @@ public class EmailNotificationValidationStrategyTest {
 	public void testMissingAllFields() {
 		EmailNotificationRequest request = new EmailNotificationRequest();
 		request.setUserEmail("");
+		request.setToken("");
 
 		ValidationResult result = validationStrategy.validateObject(request);
 
 		assertFalse(result.isValid());
-		assertEquals("User email is required", result.getMessage());
+		assertEquals("User email and User's token is required", result.getMessage());
 		assertEquals(HttpStatus.BAD_REQUEST, result.getStatus());
 	}
 }
