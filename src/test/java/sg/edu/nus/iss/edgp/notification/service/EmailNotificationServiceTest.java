@@ -45,7 +45,7 @@ public class EmailNotificationServiceTest {
     }
 
     @Test
-    void testSendInitialPasswordSetRequest_success() {
+    void testSendUserInvitationt_success() {
         EmailNotificationRequest request = new EmailNotificationRequest();
         request.setUserEmail("test@example.com");
 
@@ -55,7 +55,7 @@ public class EmailNotificationServiceTest {
 
         Mockito.when(awsConfig.sesClient()).thenReturn(sesClient);
         Mockito.when(awsConfig.getEmailFrom()).thenReturn("noreply@example.com");
-        Mockito.when(edgpNotificationConfig.getClientInvitationUserURL()).thenReturn("http://example.com/login");
+        Mockito.when(edgpNotificationConfig.getClientInvitationUserURL()).thenReturn("http://example.com/invitation");
 
         try (MockedStatic<AmazonSES> amazonSES = Mockito.mockStatic(AmazonSES.class);
              MockedStatic<DTOMapper> dtoMapper = Mockito.mockStatic(DTOMapper.class)) {
@@ -68,7 +68,7 @@ public class EmailNotificationServiceTest {
 
             dtoMapper.when(() -> DTOMapper.toNotificationDTO("test@example.com", true)).thenReturn(expectedDto);
 
-            NotificationDTO result = emailNotificationService.sendInitialPasswordSetRequest(request);
+            NotificationDTO result = emailNotificationService.sendUserInvitation(request);
 
             assertNotNull(result);
             assertTrue(result.isSent());
@@ -77,7 +77,7 @@ public class EmailNotificationServiceTest {
     }
 
     @Test
-    void testSendInitialPasswordSetRequest_failure() {
+    void testSendUserInvitation_failure() {
         EmailNotificationRequest request = new EmailNotificationRequest();
         request.setUserEmail("test@example.com");
       
@@ -85,7 +85,7 @@ public class EmailNotificationServiceTest {
 
         EmailNotificationServiceException thrown = assertThrows(
                 EmailNotificationServiceException.class,
-                () -> emailNotificationService.sendInitialPasswordSetRequest(request)
+                () -> emailNotificationService.sendUserInvitation(request)
         );
 
         assertTrue(thrown.getMessage().contains("An error occured"));

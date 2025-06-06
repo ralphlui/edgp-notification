@@ -35,8 +35,8 @@ public class EmailNotificationController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmailNotificationController.class);
 
-	@PostMapping(value = "/set-initial-password-request", produces = "application/json")
-	public  ResponseEntity<APIResponse<NotificationDTO>> sendInitialPasswordSetRequest(@RequestHeader("Authorization") String authorizationHeader,
+	@PostMapping(value = "/invitation-user", produces = "application/json")
+	public  ResponseEntity<APIResponse<NotificationDTO>> sendUserInvitation(@RequestHeader("Authorization") String authorizationHeader,
 			@RequestBody EmailNotificationRequest emailNotiReq) {
 
 		logger.info("Calling email notification initial password set request API ...");
@@ -56,7 +56,7 @@ public class EmailNotificationController {
 				return ResponseEntity.status(validationResult.getStatus()).body(APIResponse.error(message));
 			}
 
-			NotificationDTO notiDTO = emailNotificationService.sendInitialPasswordSetRequest(emailNotiReq);
+			NotificationDTO notiDTO = emailNotificationService.sendUserInvitation(emailNotiReq);
 			boolean isSent = notiDTO.isSent();
 			message = isSent ? "Email is sent successfully." : "Email is not sent successfully.";
 			HttpStatus status = isSent ? HttpStatus.OK : validationResult.getStatus();
