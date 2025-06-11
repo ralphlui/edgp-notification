@@ -12,12 +12,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthAPICall {
+public class AdminAPICall {
 
-    @Value("${auth.api.url}")
-    private String authURL;
+    @Value("${admin.api.url}")
+    private String adminURL;
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthAPICall.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminAPICall.class);
     private static final String GET_SPECIFIC_ACTIVE_USERS_EXCEPTION_MSG = "getSpecificActiveUsers exception occurred";
 
     public String validateActiveUser(String userId, String authorizationHeader) {
@@ -29,7 +29,7 @@ public class AuthAPICall {
                     .connectTimeout(Duration.ofSeconds(30))
                     .build();
 
-            String url = authURL.trim() + "/profile";
+            String url = adminURL.trim() + "/profile";
 
 
             logger.info(url);

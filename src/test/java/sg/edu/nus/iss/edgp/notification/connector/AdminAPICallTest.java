@@ -11,9 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-public class AuthAPICallTest {
+public class AdminAPICallTest {
 
-	private AuthAPICall authAPICall;
+	private AdminAPICall adminAPICall;
 
 	@Mock
 	private HttpClient httpClient;
@@ -30,12 +30,12 @@ public class AuthAPICallTest {
 	@BeforeEach
 	void setUp() {
 		MockitoAnnotations.openMocks(this);
-		authAPICall = new AuthAPICall();
+		adminAPICall = new AdminAPICall();
 
 		try {
-			java.lang.reflect.Field field = AuthAPICall.class.getDeclaredField("authURL");
+			java.lang.reflect.Field field = AdminAPICall.class.getDeclaredField("adminURL");
 			field.setAccessible(true);
-			field.set(authAPICall, "http://fake-auth-url.com/");
+			field.set(adminAPICall, "http://fake-auth-url.com/");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -46,7 +46,7 @@ public class AuthAPICallTest {
 		when(httpClient.send(any(HttpRequest.class), ArgumentMatchers.<HttpResponse.BodyHandler<String>>any()))
 				.thenThrow(new RuntimeException("Connection error"));
 
-		String result = authAPICall.validateActiveUser("user123", "Bearer xyz");
+		String result = adminAPICall.validateActiveUser("user123", "Bearer xyz");
 
 		assertEquals("", result);
 	}
