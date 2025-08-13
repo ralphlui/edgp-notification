@@ -25,6 +25,6 @@ RUN keytool -importcert \
 #    rm /tmp/demo.devplify.crt
 
 # Expose the port that the Spring Boot application is listening on
-EXPOSE 8081
+EXPOSE 8087
 # Run the Spring Boot application when the container starts
 CMD ["java", "-jar", "edgp-notification-0.0.1-SNAPSHOT.jar"]
