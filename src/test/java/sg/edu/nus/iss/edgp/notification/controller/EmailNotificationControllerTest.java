@@ -1,10 +1,10 @@
 package sg.edu.nus.iss.edgp.notification.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
 
-import org.junit.jupiter.api.Test; 
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,8 @@ public class EmailNotificationControllerTest {
 		validResult.setStatus(HttpStatus.OK);
 
 		when(auditService.createAuditDTO(anyString(), anyString(), anyString())).thenReturn(auditDTO);
-		when(emailNotificationValidationStrategy.validateObject(any())).thenReturn(validResult);
+		when(emailNotificationValidationStrategy.validateObject(any(),eq(false))).thenReturn(validResult);
+		
 		when(emailNotificationService.sendUserInvitation(any())).thenReturn(notificationDTO);
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/invitation-user")
@@ -94,7 +95,7 @@ public class EmailNotificationControllerTest {
 		invalidResult.setStatus(HttpStatus.BAD_REQUEST);
 
 		when(auditService.createAuditDTO(anyString(), anyString(), anyString())).thenReturn(auditDTO);
-		when(emailNotificationValidationStrategy.validateObject(any())).thenReturn(invalidResult);
+		when(emailNotificationValidationStrategy.validateObject(any(),eq(false))).thenReturn(invalidResult);
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/invitation-user")
 				.contentType(MediaType.APPLICATION_JSON).header("Authorization", "Bearer test-token")
@@ -112,7 +113,7 @@ public class EmailNotificationControllerTest {
 		notificationDTO.setSent(false);
 
 		when(auditService.createAuditDTO(anyString(), anyString(), anyString())).thenReturn(auditDTO);
-		when(emailNotificationValidationStrategy.validateObject(any())).thenReturn(validResult);
+		when(emailNotificationValidationStrategy.validateObject(any(),eq(false))).thenReturn(validResult);
 		when(emailNotificationService.sendUserInvitation(any())).thenReturn(notificationDTO);
 
 		mockMvc.perform(MockMvcRequestBuilders.post("/api/notifications/invitation-user")
@@ -132,7 +133,7 @@ public class EmailNotificationControllerTest {
 		validResult.setStatus(HttpStatus.OK);
 
 		when(auditService.createAuditDTO(anyString(), anyString(), anyString())).thenReturn(auditDTO);
-		when(emailNotificationValidationStrategy.validateObject(any())).thenReturn(validResult);
+		when(emailNotificationValidationStrategy.validateObject(any(),eq(false))).thenReturn(validResult);
 		when(emailNotificationService.sendUserInvitation(any()))
 				.thenThrow(new RuntimeException("Unexpected error"));
 

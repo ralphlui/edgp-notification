@@ -4,12 +4,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import sg.edu.nus.iss.edgp.notification.dto.APIResponse;
@@ -42,13 +46,13 @@ public class EmailNotificationController {
 		logger.info("Calling email notification initial password set request API ...");
 		String message = "";
 		String activityType = "Sending initial password set request";
-		String endpoint = "/api/notifications";
+		String endpoint = "/api/notifications/invitation-user";
 		String httpMethod = HttpMethod.POST.name();
 		
 		AuditDTO auditDTO = auditService.createAuditDTO(activityType, endpoint, httpMethod);
 		
 		try {
-			ValidationResult validationResult = emailNotificationValidationStrategy.validateObject(emailNotiReq);
+			ValidationResult validationResult = emailNotificationValidationStrategy.validateObject(emailNotiReq,false);
 			if (!validationResult.isValid()) {
 				message = validationResult.getMessage();
 				logger.error(message);
@@ -71,5 +75,56 @@ public class EmailNotificationController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(APIResponse.error(message));
 		}
 	}
+	
+	@PostMapping(value = "/send-email-with-attachment")
+	public ResponseEntity<APIResponse<NotificationDTO>> sendAttachmentEmail(
+			@RequestHeader("Authorization") String authorizationHeader,
+			@RequestPart("EmailRequest") EmailNotificationRequest emailNotiReq,
+			@RequestParam("file") MultipartFile file) {
+		
+		logger.info("Calling email notification with attachement API ...");
+		String message = "";
+		String activityType = "Sending notification with attachement";
+		String endpoint = "/api/notifications/send-email-with-attachment";
+		String httpMethod = HttpMethod.POST.name();
+		
+		AuditDTO auditDTO = auditService.createAuditDTO(activityType, endpoint, httpMethod);
+
+		
+	    try {
+	    	 // Validate attachment presence
+	        if (file == null || file.isEmpty()) {
+	        	message = "CSV attachment is required to send the email.";
+	        	auditService.logAudit(auditDTO, 400, message, authorizationHeader);
+	        	return ResponseEntity.status(400).body(APIResponse.error(message));
+	        }
+
+	        byte[] fileBytes = file.getBytes();
+	        String fileName = file.getOriginalFilename();
+	        
+	        ValidationResult validationResult = emailNotificationValidationStrategy.validateObject(emailNotiReq,true);
+			if (!validationResult.isValid()) {
+				message = validationResult.getMessage();
+				logger.error(message);
+				auditService.logAudit(auditDTO, validationResult.getStatus().value(), message, authorizationHeader);
+				return ResponseEntity.status(validationResult.getStatus()).body(APIResponse.error(message));
+			}
+
+
+	        NotificationDTO notiDTO = emailNotificationService.sendEmailWithAttachment(emailNotiReq, fileBytes, fileName);
+
+	        boolean isSent = notiDTO.isSent();
+			message = isSent ? "Email is sent successfully." : "Email is not sent successfully.";
+			HttpStatus status = isSent ? HttpStatus.OK : validationResult.getStatus();
+			auditService.logAudit(auditDTO, status.value(), message, authorizationHeader);
+			return isSent ? ResponseEntity.status(status).body(APIResponse.success(notiDTO, message))
+					: ResponseEntity.status(status).body(APIResponse.error(message));
+
+	    } catch (Exception e) {
+	        logger.error("Failed to send email with attachment", e);
+	        throw new EmailNotificationServiceException("Failed to send email", e);
+	    }
+	}
+
 
 }

@@ -14,7 +14,7 @@ import sg.edu.nus.iss.edgp.notification.strategy.IAPIHelperValidationStrategy;
 public class EmailNotificationValidationStrategy implements IAPIHelperValidationStrategy<EmailNotificationRequest> {
 
 	@Override
-	public ValidationResult validateObject(EmailNotificationRequest emailNotiReq) {
+	public ValidationResult validateObject(EmailNotificationRequest emailNotiReq, boolean isWithAtt) {
 		ValidationResult validationResult = new ValidationResult();
 		String userEmail = emailNotiReq.getUserEmail();
 		String token = emailNotiReq.getToken();
@@ -22,9 +22,20 @@ public class EmailNotificationValidationStrategy implements IAPIHelperValidation
 		List<String> missingFields = new ArrayList<>();
 		if (userEmail == null || userEmail.isEmpty())
 			missingFields.add("User email");
-		if ( token == null || token.isEmpty())
+		if (!isWithAtt) {
+		if (token == null || token.isEmpty())
 			missingFields.add("User's token");
+		}
 
+		if (isWithAtt) {
+			if (emailNotiReq.getBody() == null || emailNotiReq.getBody().isEmpty()) {
+				missingFields.add("Email body");
+			}
+			if (emailNotiReq.getSubject() == null || emailNotiReq.getSubject().isEmpty()) {
+				missingFields.add("Email subject");
+			}
+
+		}
 
 		if (!missingFields.isEmpty()) {
 			validationResult.setMessage(String.join(" and ", missingFields) + " is required");
@@ -38,4 +49,3 @@ public class EmailNotificationValidationStrategy implements IAPIHelperValidation
 	}
 
 }
-

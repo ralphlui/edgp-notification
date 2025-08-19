@@ -25,7 +25,7 @@ public class EmailNotificationValidationStrategyTest {
 		request.setUserEmail("test@example.com");
 		request.setToken("AAAAAA");
 
-		ValidationResult result = validationStrategy.validateObject(request);
+		ValidationResult result = validationStrategy.validateObject(request,false);
 
 		assertTrue(result.isValid());
 		assertNull(result.getMessage());
@@ -38,7 +38,7 @@ public class EmailNotificationValidationStrategyTest {
 		request.setUserEmail("");
 		request.setToken("AAAAAA");
 
-		ValidationResult result = validationStrategy.validateObject(request);
+		ValidationResult result = validationStrategy.validateObject(request,false);
 
 		assertFalse(result.isValid());
 		assertEquals("User email is required", result.getMessage());
@@ -51,7 +51,7 @@ public class EmailNotificationValidationStrategyTest {
 		request.setUserEmail("");
 		request.setToken("");
 
-		ValidationResult result = validationStrategy.validateObject(request);
+		ValidationResult result = validationStrategy.validateObject(request,false);
 
 		assertFalse(result.isValid());
 		assertEquals("User email and User's token is required", result.getMessage());
